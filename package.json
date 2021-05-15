@@ -1,15 +1,19 @@
 {
-  "name": "fivem-status-bot",
-  "version": "1.0.0",
+  "name": "discordstatuts",
+  "version": "0.0.2",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "JulienDubois",
-  "license": "ISC",
+  "main": "main.js",
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "fivereborn-query": "^1.0.4"
-  }
+    "axios": "^0.18.1",
+    "discord.js": "^11.3.2",
+    "get-json": "^1.0.0",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Noperaattori <noperaattori@pm.me> (https://github.com/noperaattori)",
+  "license": "ISC"
 }
