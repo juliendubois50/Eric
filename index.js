@@ -1,36 +1,53 @@
-const Discord = require('discord.js')
-const bot = new Discord.Client()
-const cfg = require('./index.json');
-const prefix = ('!c');
+'use_strict';
 
-bot.on('ready', function () {
-    console.log("Je sui prêt à ètre utilisé")
-    bot.user.setActivity("CaliforniaCityRP").catch(console.error)
-})
+const Discord = require('discord.js');
+const client = new Discord.Client();
 
-bot.on('guildMemberAdd', member => {
-    member.createDM().then(channel => {
-        return channel.send('Bienvenue sur le serveur CaliforniaCityRP Fivem' + member.displayName)
-        console.log('${member.displayName} à rejuoind le serveur.')
-    }).catch(console.error)
- })
+const moment = require('moment-timezone');
 
- bot.on('message', nsg => {
-     if(MSGesture.content === "Bonjour"){
-     msg.reply("Heureucx de te revoir parmis nous.")
-     }
-     if (msg.content.match(/salut/i)){
-         msg.reply("Salut")
-     }
-     if (msg.content === prefix + "ip"){
-         msg.channel.send("188.40.16.78:30797")
-         console.log("Une personne a pris l'ip du serveur.")
-     }
+const settings = require('./settings.json');
 
-    })
-    
+client.commands = new Map();
+client.aliases = new Map();
+client.guildlist = new Map();
 
+// Loader
+require('./utils/commandLoader')(client);
+require('./utils/guildLoader')(client);
+require('./utils/eventLoader')(client);
 
+/**
+ * @param {string} type
+ * @param {string} log
+ */
+client.sendLog = (type, log) => {
 
+    const channelId = client.guildlist.get('bot_manager').channels.get(type).id;
+    client.channels.fetch(channelId)
+    .then(channel => {
+        channel.send(`\`[${moment().tz("Europe/Paris").format('HH:mm:ss')}]\` | ${log}`);
+    });
 
-bot.login(cfg.token);
+}
+
+/**
+ * @param {Message} message
+ * @param {int} num
+ * @return {boolean}
+ */
+client.hasPerm = (message, num) => {
+
+    switch (num) {
+
+        case 0:
+            return true;
+        case 1:
+            return typeof message.member.roles.cache.find(role => role.name === settings.role.verified) !== 'undefined';
+        default:
+            return true;
+
+    }
+
+}
+
+client.login(settings.token || process.env.TOKEN);
